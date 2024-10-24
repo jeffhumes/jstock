@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-JstockApplication<jstock>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "org.bofus.jstock.JstockApplication",
+            "projectName": "jstock",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
