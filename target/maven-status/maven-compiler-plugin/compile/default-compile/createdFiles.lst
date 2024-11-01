@@ -1,2 +1,3 @@
+org/bofus/jstock/controller/JstockMainController.class
 org/bofus/jstock/JstockApplication.class
 org/bofus/jstock/ServletInitializer.class

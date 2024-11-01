@@ -6,6 +6,11 @@
         {
             "command": "clean package -U",
             "debug": false
+        },
+        {
+            "command": "clean package -U -DskipTests",
+            "debug": false
         }
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "automatic"
 }
