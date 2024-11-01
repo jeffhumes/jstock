@@ -11,7 +11,12 @@ const JstockMain = () => {
       .then((response) => {
         setText(response.data);
       })
-      .catch(console.error("oops, error"));
+      .catch(function (error) {
+        console.log(error);
+      })
+      .finally(function () {
+        // always executed
+      });
   }, []);
 
   useEffect(() => {
@@ -21,7 +26,12 @@ const JstockMain = () => {
       .then((response) => {
         console.log(response);
       })
-      .catch(console.error("oops, error"));
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        // always executed
+      });
   }, []);
 
   return <div>{text}</div>;
