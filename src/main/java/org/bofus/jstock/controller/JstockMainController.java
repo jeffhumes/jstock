@@ -2,6 +2,7 @@ package org.bofus.jstock.controller;
 
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.bofus.jstock.config.FinnHubConfig;
 import org.bofus.jstock.domain.StringBean;
 import org.bofus.jstock.service.StringService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +19,13 @@ public class JstockMainController {
 
   @Autowired StringService stringService;
 
-  @GetMapping("/getString")
-  public String returnString() {
-    log.debug("Entering GetMapping: /getString");
-    String returnValue = null;
-    returnValue = "The Quick Brown Fox Jumped Over The Lazy Dog's Back";
-    log.debug(String.format("returning String: %s", returnValue));
-    return returnValue;
-  }
+  @Autowired FinnHubConfig finnHubConfig;
 
   @GetMapping("/getStringFromDatabase")
   public List<StringBean> getStringFromDatabase() {
+    log.debug(finnHubConfig.getBaseUrl());
+    log.debug(finnHubConfig.getApiKey());
+    log.debug(finnHubConfig.getCompany_financials_endpoint());
     log.debug("Entering GetMapping: /getStringFromDatabase");
     List<StringBean> returnValue = null;
     returnValue = stringService.getStringBeanList();

@@ -7,33 +7,18 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { Chart } from "react-google-charts";
 
 const JstockMain = () => {
-  const [text, setText] = useState();
-  const [textList, setTextList] = useState([]);
+  const [marketStatusList, setMarketStatusList] = useState([]);
 
   useEffect(() => {
-    console.log("Entering UseEffect getString");
+    console.log("Entering UseEffect finnhub/getMarketStatus");
     axios
-      .get("/jstock/api/getString")
-      .then((response) => {
-        setText(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
-      .finally(function () {
-        // always executed
-      });
-  }, []);
-
-  useEffect(() => {
-    console.log("Entering UseEffect getStringFromDatabase");
-    axios
-      .get("/jstock/api/getStringFromDatabase")
+      .get("/jstock/finnhub/getMarketStatus")
       .then((response) => {
         console.log(response);
-        setTextList(response.data);
+        setMarketStatusList(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -45,31 +30,64 @@ const JstockMain = () => {
 
   return (
     <>
-      <div>{text}</div>
-      <br></br>
-
+      <h1>Markets Dashboard</h1>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Text</TableCell>
+              <TableCell>Exchange</TableCell>
+              <TableCell>Holiday</TableCell>
+              <TableCell>Is Market Open</TableCell>
+              <TableCell>Session</TableCell>
+              <TableCell>Current TimeStamp</TableCell>
+              <TableCell>Time Zone</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {textList.map((item) => (
+            {marketStatusList.map((item) => (
               <TableRow
-                key={item.stringName}
+                key={item.exchange}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                 <TableCell component="th" scope="row">
-                  {item.stringName}
+                  {item.exchange}
                 </TableCell>
-                <TableCell>{item.stringText}</TableCell>
+                <TableCell>{item.holiday}</TableCell>
+                <TableCell>{item.isOpen ? "Yes" : "Falsel"}</TableCell>
+                <TableCell>{item.session}</TableCell>
+                <TableCell>{item.t}</TableCell>
+                <TableCell>{item.timezone}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <br></br>
+      <Chart
+        chartType="ScatterChart"
+        data={[
+          ["Age", "Weight"],
+          [4, 5.5],
+          [8, 12],
+        ]}
+        width="100%"
+        height="400px"
+        legendToggle
+      />
+      <br></br>
+      <Chart
+        chartType="CandlestickChart"
+        data={[
+          ["day", "a", "b", "c", "d"],
+          ["Mon", 20, 28, 38, 88],
+          ["Tue", 31, 38, 55, 66],
+          ["Wed", 50, 55, 77, 80],
+          ["Thu", 50, 77, 66, 77],
+          ["Fri", 15, 66, 22, 68],
+        ]}
+        // width="100%"
+        // height="400px"
+        // legendToggle
+      />
     </>
   );
 };
