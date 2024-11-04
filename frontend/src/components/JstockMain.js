@@ -8,6 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Chart } from "react-google-charts";
+import _ from "lodash";
 
 const JstockMain = () => {
   const [marketStatusList, setMarketStatusList] = useState([]);
@@ -51,9 +52,15 @@ const JstockMain = () => {
                 <TableCell component="th" scope="row">
                   {item.exchange}
                 </TableCell>
-                <TableCell>{item.holiday}</TableCell>
-                <TableCell>{item.isOpen ? "Yes" : "Falsel"}</TableCell>
-                <TableCell>{item.session}</TableCell>
+                <TableCell>{item.holiday ? "Yes" : "No"}</TableCell>
+                <TableCell>
+                  {item.isOpen ? "Market Open" : "Market Closed"}
+                </TableCell>
+                <TableCell>
+                  {null === item.session
+                    ? "Market Closed"
+                    : _.capitalize(item.session)}
+                </TableCell>
                 <TableCell>{item.t}</TableCell>
                 <TableCell>{item.timezone}</TableCell>
               </TableRow>
