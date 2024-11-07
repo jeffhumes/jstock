@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import _ from "lodash";
 import { AgGridReact } from "ag-grid-react";
@@ -25,22 +25,51 @@ const MarketStatusAgGrid = () => {
       });
   }, []);
 
+  const PriceCellRenderer = (props) => {
+    return (
+      <>
+        <button
+          onClick={() => {
+            window.alert("YO!" + props.value);
+          }}>
+          +
+        </button>
+        {props.value}
+      </>
+    );
+  };
+
+  const defaultColDef = useMemo(() => {
+    return { flex: 1, filter: true, floatingFilter: true };
+  });
+
   const [rowData, setRowData] = useState([
-    { make: "Tesla", model: "Model Y", price: 64950, electric: true },
-    { make: "Ford", model: "Mustang GT", price: 33490, electric: false },
-    { make: "Toyota", model: "Corolla", price: 29500, electric: false },
+    { vehicleMake: "Tesla", model: "Model Y", price: 64950, electric: true },
+    { vehicleMake: "Ford", model: "Mustang GT", price: 33490, electric: false },
+    { vehicleMake: "Toyota", model: "Corolla", price: 29500, electric: false },
   ]);
 
   const [colDefs, setColDefs] = useState([
-    { field: "make" },
+    {
+      field: "vehicleMake",
+      // headerName: "Company",
+      // valueGetter: (value) => value.data.vehicleMake + " / " + value.data.price,
+    },
     { field: "model" },
-    { field: "price" },
+    {
+      field: "price",
+      valueGetter: (value) => "$" + value.data.price.toLocaleString(),
+      cellRenderer: PriceCellRenderer,
+    },
     { field: "electric" },
   ]);
 
   return colDefs && rowData ? (
     <div className="ag-theme-quartz" style={{ height: 500 }}>
-      <AgGridReact columnDefs={colDefs} rowData={rowData}></AgGridReact>
+      <AgGridReact
+        defaultColDef={defaultColDef}
+        columnDefs={colDefs}
+        rowData={rowData}></AgGridReact>
     </div>
   ) : null;
 };
