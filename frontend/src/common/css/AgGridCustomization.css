@@ -1,11 +1,18 @@
 .ag-theme-quartz {
-    --ag-foreground-color: rgb(126, 46, 132);
+    /* --ag-foreground-color: rgb(126, 46, 132);
     --ag-background-color: rgb(249, 245, 227);
     --ag-header-foreground-color: rgb(11, 12, 11);
     --ag-header-background-color: rgb(106, 202, 231);
     --ag-odd-row-background-color: rgb(0, 0, 0, 0.03);
-    --ag-header-column-resize-handle-color: rgb(126, 46, 132);
-
+    --ag-header-column-resize-handle-color: rgb(126, 46, 132); */
     --ag-font-size: 17px;
     --ag-font-family: roboto;
+}
+
+.green-cell{
+    background-color: aquamarine;
+}
+
+.red-cell{
+    background-color: rgb(218, 79, 106);
 }

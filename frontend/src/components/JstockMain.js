@@ -6,7 +6,7 @@ import MarketStatusAgGrid from "../finnHubComponents/MarketStatusAgGrid";
 const JstockMain = () => {
   return (
     <>
-      <ChartMain></ChartMain>
+      {/* <ChartMain></ChartMain> */}
       <MarketStatusAgGrid></MarketStatusAgGrid>
     </>
   );

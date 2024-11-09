@@ -1,13 +1,68 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import axios from "axios";
 import _ from "lodash";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import "../common/css/AgGridCustomization.css";
+import { Button } from "@mui/material";
 
 const MarketStatusAgGrid = () => {
   const [marketStatusList, setMarketStatusList] = useState([]);
+  const [rowData, setRowData] = useState([]);
+
+  const defaultColDef = useMemo(() => {
+    return { flex: 1, filter: true, floatingFilter: false };
+  });
+
+  const [colDefs, setColDefs] = useState([
+    { field: "exchange" },
+    { field: "holiday", headerName: "Holiday" },
+    {
+      field: "isOpen",
+      headerName: "Open",
+      valueFormatter: (p) => (p.value === "true" ? "Yes" : "No"),
+      cellClassRules: {
+        "green-cell": (p) => p.value === "true",
+        "red-cell": (p) => p.value === "false",
+      },
+    },
+    { field: "session" },
+    { field: "t" },
+    { field: "timezone" },
+  ]);
+
+  let marketStatusObject = {
+    exchange: null,
+    holiday: null,
+    isOpen: null,
+    session: null,
+    t: null,
+    timezone: null,
+  };
+
+  const PopulateMarketStatus = useCallback((props) => {
+    console.log("PopulateMarketStatus props", props);
+    const tempArray = [];
+    props.data.map((marketInfo) => {
+      console.log(marketInfo);
+      console.log("tempArray before: ", tempArray);
+      let tempObject = {
+        exchange: marketInfo.exchange,
+        holiday: marketInfo.holiday,
+        isOpen: marketInfo.isOpen,
+        session: marketInfo.session,
+        t: marketInfo.t,
+        timezone: marketInfo.timezone,
+      };
+      tempArray.push(tempObject);
+      console.log("tempArray after: ", tempArray);
+    });
+    // let obj = Object.fromEntries(arr);
+    setRowData(tempArray);
+  });
+
+  console.log("rowData", rowData);
 
   useEffect(() => {
     console.log("Entering UseEffect finnhub/getMarketStatus");
@@ -15,7 +70,9 @@ const MarketStatusAgGrid = () => {
       .get("/jstock/finnhub/getMarketStatus")
       .then((response) => {
         console.log(response);
-        setMarketStatusList(response.data);
+        response.data
+          ? PopulateMarketStatus({ data: response.data })
+          : console.log("Error processing market status information");
       })
       .catch((error) => {
         console.log(error);
@@ -25,52 +82,55 @@ const MarketStatusAgGrid = () => {
       });
   }, []);
 
-  const PriceCellRenderer = (props) => {
-    return (
-      <>
-        <button
-          onClick={() => {
-            window.alert("YO!" + props.value);
-          }}>
-          +
-        </button>
-        {props.value}
-      </>
-    );
-  };
+  const handleButtonClick = useCallback(() => {
+    console.log("Entering useCallback finnhub/getMarketHolidays");
+    axios
+      .get("/jstock/finnhub/getMarketHolidays")
+      .then((response) => {
+        console.log(response);
+        // response.data
+        //   ? PopulateMarketStatus({ data: response.data })
+        //   : console.log("Error processing market status information");
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        // always executed
+      });
+  }, []);
 
-  const defaultColDef = useMemo(() => {
-    return { flex: 1, filter: true, floatingFilter: true };
-  });
-
-  const [rowData, setRowData] = useState([
-    { vehicleMake: "Tesla", model: "Model Y", price: 64950, electric: true },
-    { vehicleMake: "Ford", model: "Mustang GT", price: 33490, electric: false },
-    { vehicleMake: "Toyota", model: "Corolla", price: 29500, electric: false },
-  ]);
-
-  const [colDefs, setColDefs] = useState([
-    {
-      field: "vehicleMake",
-      // headerName: "Company",
-      // valueGetter: (value) => value.data.vehicleMake + " / " + value.data.price,
-    },
-    { field: "model" },
-    {
-      field: "price",
-      valueGetter: (value) => "$" + value.data.price.toLocaleString(),
-      cellRenderer: PriceCellRenderer,
-    },
-    { field: "electric" },
-  ]);
+  // useEffect(() => {
+  //   console.log("Entering UseEffect finnhub/getMarketHolidays");
+  //   axios
+  //     .get("/jstock/finnhub/getMarketHolidays")
+  //     .then((response) => {
+  //       console.log(response);
+  //       // response.data
+  //       //   ? PopulateMarketStatus({ data: response.data })
+  //       //   : console.log("Error processing market status information");
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     })
+  //     .finally(() => {
+  //       // always executed
+  //     });
+  // }, []);
 
   return colDefs && rowData ? (
-    <div className="ag-theme-quartz" style={{ height: 500 }}>
-      <AgGridReact
-        defaultColDef={defaultColDef}
-        columnDefs={colDefs}
-        rowData={rowData}></AgGridReact>
-    </div>
+    <>
+      <div className="ag-theme-quartz" style={{ height: 500 }}>
+        <AgGridReact
+          defaultColDef={defaultColDef}
+          columnDefs={colDefs}
+          rowData={rowData}></AgGridReact>
+      </div>
+      <div>
+        {" "}
+        <Button onClick={handleButtonClick}>sadfasdf</Button>
+      </div>
+    </>
   ) : null;
 };
 
