@@ -10,4 +10,5 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "market.config")
 public class MarketConfig {
   List<String> availableMarkets;
+  private String marketInfoDownloadLocation;
 }

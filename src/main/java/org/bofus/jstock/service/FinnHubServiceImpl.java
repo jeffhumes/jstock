@@ -23,4 +23,8 @@ public class FinnHubServiceImpl implements FinnHubService {
     log.debug("getMarketHolidays debug point");
     return dao.getMarketHolidays(exchangeCodeList);
   }
+
+  // public void populateHolidayTable(HolidayRoot holidayList) {
+  // dao.populateHolidayTable(holidayList);
+  // }
 }
