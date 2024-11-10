@@ -55,26 +55,38 @@ public class GenericScheduler {
     try (FileInputStream fis = new FileInputStream(new File(fileLocation));
         Workbook workbook = new XSSFWorkbook(fis); ) {
       Sheet sheet = workbook.getSheetAt(0);
-      for (Row row : sheet) {
-        for (Cell cell : row) {
-          switch (cell.getCellType()) {
-            case STRING:
-              log.debug(String.format("%s", cell.getStringCellValue()));
-              break;
-            case NUMERIC:
-              log.debug(String.format("%s", cell.getNumericCellValue()));
-              break;
-            case BOOLEAN:
-              log.debug(String.format("%s", cell.getBooleanCellValue()));
-              break;
-            case FORMULA:
-              log.debug(String.format("%s", cell.getCellFormula()));
-              break;
-            default:
-              log.debug("Could not determine Cell Type");
-          }
+      Row headerRow = sheet.getRow(0);
+      for (Cell cell : headerRow) {
+        // log.debug(String.format("String Value of cell is: %s",
+        // cell.getStringCellValue()));
+        if (cell.getStringCellValue().equalsIgnoreCase("ISO COUNTRY CODE (ISO 3166)")) {
+          int countryCodeColumnIndex = cell.getColumnIndex();
+          log.debug(
+              String.format(
+                  "FOUND ISO COUNTRY CODE (ISO 3166) at column index %s", countryCodeColumnIndex));
         }
       }
+      // for (Row row : sheet) {
+      // log.debug(String.format("Row Number: %s", row.getRowNum()));
+      // for (Cell cell : row) {
+      // switch (cell.getCellType()) {
+      // case STRING:
+      // log.debug(String.format("%s", cell.getStringCellValue()));
+      // break;
+      // case NUMERIC:
+      // log.debug(String.format("%s", cell.getNumericCellValue()));
+      // break;
+      // case BOOLEAN:
+      // log.debug(String.format("%s", cell.getBooleanCellValue()));
+      // break;
+      // case FORMULA:
+      // log.debug(String.format("%s", cell.getCellFormula()));
+      // break;
+      // default:
+      // log.debug("Could not determine Cell Type");
+      // }
+      // }
+      // }
 
     } catch (IOException e) {
       // TODO Auto-generated catch block
