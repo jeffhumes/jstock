@@ -86,7 +86,7 @@
 			<version>3.5.0</version>
 		</dependency>
 
-		<!-- //Excel Support -->
+		<!-- Excel Support -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
