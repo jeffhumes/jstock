@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.bofus.jstock.config.FinnHubConfig;
+import org.bofus.jstock.domain.ExchangeCountryCodes;
 import org.bofus.jstock.domain.FinnHubMarketHolidays.HolidayRoot;
 import org.bofus.jstock.domain.FinnHubMarketStatus;
 import org.bofus.jstock.service.FinnHubService;
@@ -47,5 +48,10 @@ public class FinnHubController {
     log.debug(finnHubConfig.getMarket_status_endpoint());
     returnEntity = finnHubService.getMarketHolidays(exchangeCodeList);
     return returnEntity;
+  }
+
+  @GetMapping("/getUsCode")
+  public List<ExchangeCountryCodes> getUsExchangeCode() {
+    return finnHubService.getUsExchangeCode();
   }
 }

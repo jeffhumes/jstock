@@ -9,6 +9,8 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -16,6 +18,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.bofus.jstock.config.MarketConfig;
+import org.bofus.jstock.util.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -26,6 +29,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 @EnableScheduling
 public class GenericScheduler {
   @Autowired MarketConfig marketConfig;
+
+  @Autowired ArrayUtils arrayUtils;
 
   // @Scheduled(cron = "0 */100 * * * ?")
   public void getExchangeSpreadsheet() throws MalformedURLException, IOException {
@@ -56,16 +61,34 @@ public class GenericScheduler {
         Workbook workbook = new XSSFWorkbook(fis); ) {
       Sheet sheet = workbook.getSheetAt(0);
       Row headerRow = sheet.getRow(0);
+      int countryCodeColumnIndex = 0;
+
       for (Cell cell : headerRow) {
         // log.debug(String.format("String Value of cell is: %s",
         // cell.getStringCellValue()));
         if (cell.getStringCellValue().equalsIgnoreCase("ISO COUNTRY CODE (ISO 3166)")) {
-          int countryCodeColumnIndex = cell.getColumnIndex();
+          countryCodeColumnIndex = cell.getColumnIndex();
           log.debug(
               String.format(
                   "FOUND ISO COUNTRY CODE (ISO 3166) at column index %s", countryCodeColumnIndex));
         }
       }
+
+      // NOTE: De-duplicate the list of country codes
+      List<String> countryCodeList = new ArrayList<>();
+
+      for (Row row : sheet) {
+        Cell cell = row.getCell(countryCodeColumnIndex);
+        countryCodeList.add(cell.getStringCellValue());
+      }
+
+      log.debug(String.format("Country Code List size before de-dupe: %s", countryCodeList.size()));
+
+      // NOTE: De-duplicate the list of country codes
+      arrayUtils.deDupeStringList(countryCodeList);
+
+      log.debug(String.format("Country Code List size after de-dupe: %s", countryCodeList.size()));
+
       // for (Row row : sheet) {
       // log.debug(String.format("Row Number: %s", row.getRowNum()));
       // for (Cell cell : row) {

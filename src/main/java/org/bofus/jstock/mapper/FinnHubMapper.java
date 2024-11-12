@@ -1,9 +1,11 @@
 package org.bofus.jstock.mapper;
 
+import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import org.bofus.jstock.domain.ExchangeCountryCodes;
 
 @Mapper
-public class FinnHubMapper {
+public interface FinnHubMapper {
 
-  // public void populateHolidayTable(HolidayRoot holidayRoot) {}
+  List<ExchangeCountryCodes> getUsExchangeCode();
 }
