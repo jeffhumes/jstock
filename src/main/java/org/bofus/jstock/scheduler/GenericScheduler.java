@@ -18,6 +18,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.bofus.jstock.config.MarketConfig;
+import org.bofus.jstock.service.CommonService;
+import org.bofus.jstock.service.FinnHubService;
 import org.bofus.jstock.util.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -31,6 +33,10 @@ public class GenericScheduler {
   @Autowired MarketConfig marketConfig;
 
   @Autowired ArrayUtils arrayUtils;
+
+  @Autowired FinnHubService finnHubService;
+
+  @Autowired CommonService commonService;
 
   // @Scheduled(cron = "0 */100 * * * ?")
   public void getExchangeSpreadsheet() throws MalformedURLException, IOException {
@@ -56,6 +62,7 @@ public class GenericScheduler {
     log.debug("Starting populateExchangeData");
     String tmpdir = System.getProperty("java.io.tmpdir");
     String fileLocation = tmpdir + File.separatorChar + "exchange.xlsx";
+    List<String> countryCodeList = new ArrayList<>();
 
     try (FileInputStream fis = new FileInputStream(new File(fileLocation));
         Workbook workbook = new XSSFWorkbook(fis); ) {
@@ -64,8 +71,6 @@ public class GenericScheduler {
       int countryCodeColumnIndex = 0;
 
       for (Cell cell : headerRow) {
-        // log.debug(String.format("String Value of cell is: %s",
-        // cell.getStringCellValue()));
         if (cell.getStringCellValue().equalsIgnoreCase("ISO COUNTRY CODE (ISO 3166)")) {
           countryCodeColumnIndex = cell.getColumnIndex();
           log.debug(
@@ -74,46 +79,28 @@ public class GenericScheduler {
         }
       }
 
-      // NOTE: De-duplicate the list of country codes
-      List<String> countryCodeList = new ArrayList<>();
-
+      // NOTE: Populate the list of country codes
       for (Row row : sheet) {
         Cell cell = row.getCell(countryCodeColumnIndex);
         countryCodeList.add(cell.getStringCellValue());
       }
-
-      log.debug(String.format("Country Code List size before de-dupe: %s", countryCodeList.size()));
-
-      // NOTE: De-duplicate the list of country codes
-      arrayUtils.deDupeStringList(countryCodeList);
-
-      log.debug(String.format("Country Code List size after de-dupe: %s", countryCodeList.size()));
-
-      // for (Row row : sheet) {
-      // log.debug(String.format("Row Number: %s", row.getRowNum()));
-      // for (Cell cell : row) {
-      // switch (cell.getCellType()) {
-      // case STRING:
-      // log.debug(String.format("%s", cell.getStringCellValue()));
-      // break;
-      // case NUMERIC:
-      // log.debug(String.format("%s", cell.getNumericCellValue()));
-      // break;
-      // case BOOLEAN:
-      // log.debug(String.format("%s", cell.getBooleanCellValue()));
-      // break;
-      // case FORMULA:
-      // log.debug(String.format("%s", cell.getCellFormula()));
-      // break;
-      // default:
-      // log.debug("Could not determine Cell Type");
-      // }
-      // }
-      // }
-
     } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      log.error(e.getLocalizedMessage());
+    }
+
+    log.debug(String.format("Country Code List size before de-dupe: %s", countryCodeList.size()));
+
+    // NOTE: De-duplicate the list of country codes
+    arrayUtils.deDupeStringList(countryCodeList);
+
+    log.debug(String.format("Country Code List size after de-dupe: %s", countryCodeList.size()));
+
+    log.debug(countryCodeList.toString());
+
+    // commonService.populateExchangeCountryData(countryCodeList);
+
+    for (String exchangeCode : countryCodeList) {
+      commonService.populateExchangeCountryDataSingle(exchangeCode);
     }
   }
 }

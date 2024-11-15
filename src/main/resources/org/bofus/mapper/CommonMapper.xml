@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.bofus.jstock.mapper.CommonMapper">
+
+<insert id="populateExchangeCountryData" parameterType="java.util.List">
+    INSERT IGNORE INTO exchange_country_codes (
+    id,
+    exchange_code)
+    VALUES
+  <foreach collection="exchangeData" item="exchangeCode" index="index" open="(" separator="),("  close=")">
+    (COUNTRY_CODE_SEQUENCER.nextval,
+    #{exchangeCode})
+  </foreach>)
+</insert>
+
+<insert id="populateExchangeCountryDataSingle">
+    INSERT IGNORE INTO exchange_country_codes (
+    id,
+    exchange_code)
+    VALUES
+    (COUNTRY_CODE_SEQUENCER.nextval,
+    #{exchangeCode})
+</insert>
+
+
+</mapper>

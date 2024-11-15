@@ -9,4 +9,5 @@
     select ID, EXCHANGE_CODE from jstock.exchange_country_codes ecc 
     WHERE  EXCHANGE_CODE = 'US'; 
 </select>
+
 </mapper>

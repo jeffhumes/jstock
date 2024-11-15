@@ -12,5 +12,6 @@ public interface FinnHubService {
   public List<HolidayRoot> getMarketHolidays(List<String> exchangeCodeList);
 
   public List<ExchangeCountryCodes> getUsExchangeCode();
+
   // public void populateHolidayTable(HolidayRoot holidayList);
 }
