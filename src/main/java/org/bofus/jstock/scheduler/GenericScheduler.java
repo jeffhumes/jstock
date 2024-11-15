@@ -38,7 +38,7 @@ public class GenericScheduler {
 
   @Autowired CommonService commonService;
 
-  // @Scheduled(cron = "0 */100 * * * ?")
+  @Scheduled(cron = "* * 22 * * ?")
   public void getExchangeSpreadsheet() throws MalformedURLException, IOException {
     String url = marketConfig.getMarketInfoDownloadLocation();
     String tmpdir = System.getProperty("java.io.tmpdir");
@@ -57,7 +57,7 @@ public class GenericScheduler {
     }
   }
 
-  @Scheduled(cron = "0 */1 * * * ?")
+  @Scheduled(cron = "* * 23 * * ?")
   public void populateExchangeData() {
     log.debug("Starting populateExchangeData");
     String tmpdir = System.getProperty("java.io.tmpdir");
