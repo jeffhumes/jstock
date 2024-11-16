@@ -6,15 +6,16 @@ import CommonHeader from "../common/CommonHeader";
 import axios from "axios";
 
 const JstockMain = () => {
-  const [funnhubConfig, setFinnHubConfig] = useState();
+  const [finnhubConfig, setFinnHubConfig] = useState();
+  const [finnhubConfigIsPaid, setFinnHubConfigIsPaid] = useState();
 
   useEffect(() => {
-    console.log("Entering UseEffect finnhub/getFinnhubConfig");
+    console.log("Entering UseEffect finnhub/getFinnhubConfigIsPaid");
     axios
-      .get("/jstock/finnhub/getFinnhubConfig")
+      .get("/jstock/finnhub/getFinnhubConfigIsPaid")
       .then((response) => {
-        console.log(response);
-        setFinnHubConfig(response.data);
+        console.log("Is Paid Finnhub Subscription?: ", response.data);
+        setFinnHubConfigIsPaid(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -26,7 +27,9 @@ const JstockMain = () => {
 
   return (
     <>
-      <CommonHeader headerText="My J-Stock Dashboard"></CommonHeader>
+      <CommonHeader
+        headerText="My J-Stock Dashboard"
+        finnhubConfigIsPaid={finnhubConfigIsPaid}></CommonHeader>
       {/* <ChartMain></ChartMain> */}
       <MarketStatusAgGrid></MarketStatusAgGrid>
     </>

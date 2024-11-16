@@ -11,8 +11,10 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import axios from "axios";
+import { isWeakMap } from "lodash";
 
 const CommonHeader = (props) => {
+  console.log("CommonHeader props: ", props);
   const [exchangeCountryList, setExchangeCountryList] = useState([]);
 
   useEffect(() => {
@@ -58,11 +60,21 @@ const CommonHeader = (props) => {
           label="Select a Market"
           // onChange={handleChange}
         >
-          {exchangeCountryList.map((item) => (
-            <MenuItem key={item.id} value={item.exchangeCode}>
-              {item.exchangeCode}
-            </MenuItem>
-          ))}
+          {exchangeCountryList.map((item) =>
+            props.finnhubConfigIsPaid ? (
+              <MenuItem key={item.id} value={item.exchangeCode}>
+                {item.exchangeCode}
+              </MenuItem>
+            ) : item.exchangeCode === "US" ? (
+              <MenuItem key={item.id} value={item.exchangeCode}>
+                {item.exchangeCode}
+              </MenuItem>
+            ) : (
+              <MenuItem disabled key={item.id} value={item.exchangeCode}>
+                {item.exchangeCode}
+              </MenuItem>
+            )
+          )}
         </Select>
 
         <Button color="inherit">Login</Button>
