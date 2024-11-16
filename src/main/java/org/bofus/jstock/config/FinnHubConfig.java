@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "api.finnhub")
 public class FinnHubConfig {
+  private boolean paidSubscription;
   private String baseUrl;
   private String apiKey;
 

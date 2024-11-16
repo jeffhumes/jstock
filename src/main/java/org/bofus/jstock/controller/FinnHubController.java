@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.bofus.jstock.config.FinnHubConfig;
-import org.bofus.jstock.domain.ExchangeCountryCodes;
 import org.bofus.jstock.domain.FinnHubMarketHolidays.HolidayRoot;
 import org.bofus.jstock.domain.FinnHubMarketStatus;
 import org.bofus.jstock.service.FinnHubService;
@@ -24,12 +23,26 @@ public class FinnHubController {
 
   @Autowired FinnHubService finnHubService;
 
+  @GetMapping("/getFinnhubConfig")
+  public FinnHubConfig getFinnhubConfig() {
+    FinnHubConfig fc = new FinnHubConfig();
+    return fc;
+  }
+
+  @GetMapping("/getFinnhubConfigIsPaid")
+  public boolean getFinnhubConfigIsPaid() {
+    return finnHubConfig.isPaidSubscription();
+  }
+
   @GetMapping("/getMarketStatus")
   public List<FinnHubMarketStatus> getMarketStatus() {
     List<String> exchangeCodeList = new ArrayList<>();
     exchangeCodeList.add("US");
     List<FinnHubMarketStatus> returnEntity = new ArrayList();
     log.debug("Entering GetMapping: /getMarketStatus");
+    log.debug(
+        String.format(
+            "Is this a paid subscription to FinnHub: %s", finnHubConfig.isPaidSubscription()));
     log.debug(finnHubConfig.getBaseUrl());
     log.debug(finnHubConfig.getApiKey());
     log.debug(finnHubConfig.getMarket_status_endpoint());
@@ -48,10 +61,5 @@ public class FinnHubController {
     log.debug(finnHubConfig.getMarket_status_endpoint());
     returnEntity = finnHubService.getMarketHolidays(exchangeCodeList);
     return returnEntity;
-  }
-
-  @GetMapping("/getUsCode")
-  public List<ExchangeCountryCodes> getUsExchangeCode() {
-    return finnHubService.getUsExchangeCode();
   }
 }
