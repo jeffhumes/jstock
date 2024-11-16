@@ -97,10 +97,15 @@ public class GenericScheduler {
 
     log.debug(countryCodeList.toString());
 
-    // commonService.populateExchangeCountryData(countryCodeList);
-
     for (String exchangeCode : countryCodeList) {
       commonService.populateExchangeCountryDataSingle(exchangeCode);
     }
   }
+
+  // @Scheduled(cron = "0 */1 * * * ?")
+  // public List<ExchangeCountryCodes> getExchangeCountryList() {
+  // List<ExchangeCountryCodes> returnList = new ArrayList<>();
+  // returnList = commonService.getExchangeCountryList();
+  // return returnList;
+  // }
 }

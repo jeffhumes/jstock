@@ -3,6 +3,8 @@
 
 <mapper namespace="org.bofus.jstock.mapper.CommonMapper">
 
+<resultMap id="exchangeCodeList" type="org.bofus.jstock.domain.ExchangeCountryCodes"/>
+
 <insert id="populateExchangeCountryData" parameterType="java.util.List">
     INSERT IGNORE INTO exchange_country_codes (
     id,
@@ -23,5 +25,10 @@
     #{exchangeCode})
 </insert>
 
+<select id="getExchangeCountryList" resultType="map" resultMap="exchangeCodeList">
+  SELECT ID,
+    EXCHANGE_CODE
+    FROM EXCHANGE_COUNTRY_CODES;
+</select>
 
 </mapper>

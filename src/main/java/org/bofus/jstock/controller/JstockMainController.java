@@ -1,9 +1,12 @@
 package org.bofus.jstock.controller;
 
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.bofus.jstock.config.FinnHubConfig;
+import org.bofus.jstock.domain.ExchangeCountryCodes;
+import org.bofus.jstock.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,15 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class JstockMainController {
 
-  @Autowired FinnHubConfig finnHubConfig;
+  @Autowired CommonService commonService;
 
-  // @GetMapping("/getStringFromDatabase")
-  // public List<StringBean> getStringFromDatabase() {
-  // log.debug(finnHubConfig.getBaseUrl());
-  // log.debug(finnHubConfig.getApiKey());
-  // log.debug(finnHubConfig.getCompany_financials_endpoint());
-  // log.debug("Entering GetMapping: /getStringFromDatabase");
-  // List<StringBean> returnValue = null;
-  // return returnValue;
-  // }
+  @GetMapping("/getExchangeCountryList")
+  public List<ExchangeCountryCodes> getExchangeCountryList() {
+    return commonService.getExchangeCountryList();
+  }
 }
