@@ -17,12 +17,10 @@ public class FinnHubServiceImpl implements FinnHubService {
 
   @Override
   public List<FinnHubMarketStatus> getMarketStatus(List<String> exchangeCodeList) {
-    log.debug("debug point");
     return dao.getMarketStatus(exchangeCodeList);
   }
 
   public List<HolidayRoot> getMarketHolidays(List<String> exchangeCodeList) {
-    log.debug("getMarketHolidays debug point");
     return dao.getMarketHolidays(exchangeCodeList);
   }
 }

@@ -37,7 +37,6 @@ public class FinnHubDaoImpl implements FinnHubDao {
               .retrieve()
               .body(FinnHubMarketStatus.class);
 
-      log.debug("debug point");
       returnList.add(thisObject);
     }
 
