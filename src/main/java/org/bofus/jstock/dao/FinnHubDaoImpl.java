@@ -69,4 +69,6 @@ public class FinnHubDaoImpl implements FinnHubDao {
 
     return returnList;
   }
+
+  public void populateHolidayTable(HolidayRoot holiday) {}
 }

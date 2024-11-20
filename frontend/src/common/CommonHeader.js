@@ -22,7 +22,7 @@ const CommonHeader = (props) => {
     axios
       .get("/jstock/api/getExchangeCountryList")
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         setExchangeCountryList(response.data);
       })
       .catch((error) => {
@@ -33,7 +33,7 @@ const CommonHeader = (props) => {
       });
   }, []);
 
-  console.log("exchangeCountryList", exchangeCountryList);
+  // console.log("exchangeCountryList", exchangeCountryList);
 
   return (
     <AppBar position="static">
@@ -58,8 +58,7 @@ const CommonHeader = (props) => {
           size="small"
           // value={age}
           label="Select a Market"
-          // onChange={handleChange}
-        >
+          onChange={props.handleExchangeCodeSelection}>
           {exchangeCountryList.map((item) =>
             props.finnhubConfigIsPaid ? (
               <MenuItem key={item.id} value={item.exchangeCode}>

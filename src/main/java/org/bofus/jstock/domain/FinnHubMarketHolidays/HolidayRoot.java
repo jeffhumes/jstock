@@ -9,8 +9,7 @@ public class HolidayRoot {
   public String exchange;
   public String timezone;
 
-  // FIXME: these are for use in populating the database until I figure out how to
-  // use mybatis with embedded objects
+  // FIXME: remove these after you figure out complex embedded objects in mybatis
   public String eventName;
   public String atDate;
   public String tradingHour;

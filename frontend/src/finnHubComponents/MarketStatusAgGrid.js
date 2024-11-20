@@ -7,7 +7,7 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 import "../common/css/AgGridCustomization.css";
 import { Button } from "@mui/material";
 
-const MarketStatusAgGrid = () => {
+const MarketStatusAgGrid = (superProps) => {
   const [marketStatusList, setMarketStatusList] = useState([]);
   const [rowData, setRowData] = useState([]);
 
@@ -45,8 +45,8 @@ const MarketStatusAgGrid = () => {
     console.log("PopulateMarketStatus props", props);
     const tempArray = [];
     props.data.map((marketInfo) => {
-      console.log(marketInfo);
-      console.log("tempArray before: ", tempArray);
+      // console.log(marketInfo);
+      // console.log("tempArray before: ", tempArray);
       let tempObject = {
         exchange: marketInfo.exchange,
         holiday: marketInfo.holiday,
@@ -56,20 +56,20 @@ const MarketStatusAgGrid = () => {
         timezone: marketInfo.timezone,
       };
       tempArray.push(tempObject);
-      console.log("tempArray after: ", tempArray);
+      // console.log("tempArray after: ", tempArray);
     });
     // let obj = Object.fromEntries(arr);
     setRowData(tempArray);
-  });
+  }, []);
 
-  console.log("rowData", rowData);
+  // console.log("rowData", rowData);
 
   useEffect(() => {
     console.log("Entering UseEffect finnhub/getMarketStatus");
     axios
       .get("/jstock/finnhub/getMarketStatus")
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         response.data
           ? PopulateMarketStatus({ data: response.data })
           : console.log("Error processing market status information");

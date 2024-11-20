@@ -5,9 +5,33 @@
 
 <resultMap id="exchangeCountryCodesMap" type="org.bofus.jstock.domain.ExchangeCountryCodes"/>
 
-<select id="getUsExchangeCode" resultType="map" resultMap="exchangeCountryCodesMap" >
-    select ID, EXCHANGE_CODE from jstock.exchange_country_codes ecc 
-    WHERE  EXCHANGE_CODE = 'US'; 
-</select>
+<!-- <insert id="populateHolidayTable" parameterType="org.bofus.jstock.domain.FinnHubMarketHolidays.HolidayRoot">
+    INSERT IGNORE INTO exchange_country_codes (
+    id,
+    EVENT_NAME,
+    AT_DATE,
+    TRADING_HOUR)
+    VALUES
+  <foreach collection="holidayRoot.data" item="holiday" index="index">
+    (HOLIDAY_SEQUENCER.nextval,
+    #{holiday.eventName},
+    #{holiday.atDate},
+    #{holiday.tradingHour})
+  </foreach>)
+</insert> -->
+
+<insert id="populateHolidayTable" parameterType="org.bofus.jstock.domain.FinnHubMarketHolidays.HolidayRoot">
+    INSERT IGNORE INTO exchange_holidays (
+    id,
+    EVENT_NAME,
+    AT_DATE,
+    TRADING_HOUR)
+    VALUES
+    (HOLIDAY_SEQUENCER.nextval,
+    #{holidayRoot.eventName},
+    #{holidayRoot.atDate},
+    #{holidayRoot.tradingHour})
+</insert>
+
 
 </mapper>

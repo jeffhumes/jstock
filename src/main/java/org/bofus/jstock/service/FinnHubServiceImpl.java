@@ -23,4 +23,9 @@ public class FinnHubServiceImpl implements FinnHubService {
   public List<HolidayRoot> getMarketHolidays(List<String> exchangeCodeList) {
     return dao.getMarketHolidays(exchangeCodeList);
   }
+
+  public void populateHolidayTable(HolidayRoot holidayRoot) {
+    log.debug(holidayRoot.toString());
+    mapper.populateHolidayTable(holidayRoot);
+  }
 }

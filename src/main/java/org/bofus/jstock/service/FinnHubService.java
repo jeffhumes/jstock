@@ -9,4 +9,6 @@ public interface FinnHubService {
   public List<FinnHubMarketStatus> getMarketStatus(List<String> exchangeCodeList);
 
   public List<HolidayRoot> getMarketHolidays(List<String> exchangeCodeList);
+
+  public void populateHolidayTable(HolidayRoot holidayRoot);
 }
